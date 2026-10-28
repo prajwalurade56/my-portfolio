@@ -8,6 +8,7 @@ const MySQLStore = require("express-mysql-session")(session);
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
@@ -25,8 +26,12 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || "defaultdb",
   ssl: {
-    rejectUnauthorized: true
-  }
+  ca: fs.readFileSync(
+    process.env.DB_SSL_CA_PATH || "/etc/secrets/ca.pem",
+    "utf8"
+  ),
+  rejectUnauthorized: true
+}
 };
 
 const pool = mysql.createPool({
