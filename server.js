@@ -19,10 +19,14 @@ if (!process.env.DB_PASSWORD || !process.env.SESSION_SECRET ||
 }
 
 const dbConfig = {
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT) || 3306,
+  user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME || "expense_tracker"
+  database: process.env.DB_NAME || "defaultdb",
+  ssl: {
+    rejectUnauthorized: true
+  }
 };
 
 const pool = mysql.createPool({
